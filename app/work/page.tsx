@@ -109,17 +109,20 @@ export default function Work() {
       return <div>Loading...</div>;
     }
 
-    // return <div>Market content goes here</div>;
-
     return (
       <div className="market">
         {markets?.markets?.edges.map((item: any, i) => (
           <>
-            {/* {console.log(
-              "name",
-              item?.node?.tradableInstrument?.instrument?.code
-            )} */}
-            <div className="item_market">
+            <div
+              className="item_market"
+              onClick={() => {
+                // Construct the URL using item.node.id
+                const marketUrl = `https://explorer.vega.xyz/markets/${item?.node?.id}`;
+
+                // Redirect to the constructed URL
+                window.location.href = marketUrl;
+              }}
+            >
               {item?.node?.tradableInstrument?.instrument?.code}
             </div>
           </>
