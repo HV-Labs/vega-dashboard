@@ -12,7 +12,12 @@ export default function Market() {
       <div>ok</div>
       {/* {JSON.stringify(markets)} */}
       {markets?.markets?.edges.map((item: any, i) => (
-        <li key={i}>{JSON.stringify(item)}</li>
+        <>
+          {console.log(
+            "name",
+            item?.node?.tradableInstrument?.instrument?.code
+          )}
+        </>
       ))}
     </>
   );

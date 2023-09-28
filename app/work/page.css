@@ -1,0 +1,129 @@
+.title {
+  font-family: "Staatliches", cursive;
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 22px;
+  padding: 7px;
+  color: #fff;
+}
+
+.loading {
+  font-family: "Staatliches", cursive;
+  font-size: 18px;
+  color: #fff;
+  margin: 0 auto;
+  animation: blinkAnime 0.03s infinite alternate;
+}
+
+@keyframes blinkAnime {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.title .version {
+  font-size: 13px;
+  padding-left: 5px;
+}
+
+.title .desc {
+  font-size: 12px;
+  padding: 10px 0 0 0;
+}
+
+.block-content {
+  text-align: left;
+  color: #000;
+  padding: 2px 5px;
+  font-size: 10px;
+  pointer-events: none;
+}
+.block-content .number {
+  font-size: 13px;
+}
+.block-content .hexColor {
+  display: flex;
+  padding-top: 5px;
+}
+.block-content .hexColor .label {
+  padding-right: 5px;
+}
+.block-content .hexColor .hexColorBox {
+  width: 10px;
+  height: 10px;
+  display: block;
+}
+
+.tx-content {
+  text-align: left;
+  background: #000;
+  color: white;
+  padding: 2px 5px 3px;
+  font-size: 10px;
+  pointer-events: none;
+  /* transform: scale(0.5); */
+}
+
+.tx-content .hexColor {
+  display: flex;
+  padding-top: 5px;
+}
+
+.tx-content .hexColor .label {
+  padding-right: 5px;
+}
+
+.tx-content .hexColor .hexColorBox {
+  width: 10px;
+  height: 10px;
+  display: block;
+}
+
+.range {
+  position: absolute;
+  left: 50%;
+  bottom: 10%;
+  transform: translate(-50%, -50%);
+}
+input[type="range"] {
+  -webkit-appearance: none;
+  margin: 18px 0;
+  width: 50vw;
+}
+input[type="range"]:focus {
+  outline: none;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 1px;
+  cursor: pointer;
+  border: 0.1px solid #fff;
+}
+input[type="range"]::-webkit-slider-thumb {
+  height: 36px;
+  width: 16px;
+  background: #ffffff;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -18px;
+}
+
+.market {
+  font-family: "Staatliches", cursive;
+  position: absolute;
+  display: flex;
+  bottom: 0;
+  left: 0;
+  font-size: 12px;
+  padding: 7px;
+  color: #fff;
+}
+
+.item_market {
+  margin: 0 4px;
+  cursor: pointer;
+}
