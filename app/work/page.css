@@ -1,5 +1,6 @@
 .title {
   font-family: "Staatliches";
+  z-index: 10;
   position: absolute;
   top: 0;
   left: 0;
@@ -88,6 +89,7 @@
   left: 50%;
   bottom: 10%;
   transform: translate(-50%, -50%);
+  z-index: 10;
 }
 input[type="range"] {
   -webkit-appearance: none;
@@ -115,7 +117,7 @@ input[type="range"]::-webkit-slider-thumb {
 .market {
   font-family: "Staatliches";
   position: absolute;
-  display: flex;
+  /* display: flex; */
   bottom: 0;
   left: 0;
   font-size: 12px;
@@ -126,4 +128,11 @@ input[type="range"]::-webkit-slider-thumb {
 .item_market {
   margin: 0 4px;
   cursor: pointer;
+}
+
+.canvas {
+  /* bottom: 0; */
+  /* top: 200px; */
+  /* height: 100vh; */
+  z-index: 1;
 }

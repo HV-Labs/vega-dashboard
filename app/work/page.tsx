@@ -1,5 +1,11 @@
 "use client";
-import React, { useMemo, useEffect, useState, useCallback } from "react";
+import React, {
+  useMemo,
+  useEffect,
+  useState,
+  useCallback,
+  useRef,
+} from "react";
 import {
   SpringValue,
   SpringRef,
@@ -7,20 +13,25 @@ import {
   animated,
   config,
 } from "react-spring";
-import { Canvas, extend, useThree } from "@react-three/fiber";
-import { Effects } from "@react-three/drei";
+import { Canvas, extend, useThree, useFrame } from "@react-three/fiber";
+import { Effects, useProgress } from "@react-three/drei";
 import useYScroll from "../../hooks/useYScroll";
 import { GlitchPass } from "three/examples/jsm/postprocessing/GlitchPass";
 import { Html } from "@react-three/drei";
 import { a } from "@react-spring/three";
 import useInterval from "use-interval";
 import useListMarket from "@/hooks/market/useListMarket";
-
+import Block from "@/assets/Block";
+import Art from "@/assets/Art";
 import "./page.css";
 
+import Sphere from "@/components/Sphere";
+
 import Swarm from "@/components/Swarm";
-import { Box } from "@/components/Box";
-const BLOCK_NUM = 50;
+// import { Box } from "@/components/Box";
+import { Ball } from "@/components/Ball";
+
+const BLOCK_NUM = 40;
 extend({ GlitchPass });
 
 export default function Work() {
@@ -62,6 +73,22 @@ export default function Work() {
     return null;
   }
 
+  const onHoverOverBox = useCallback(() => {
+    bgStyleRef({
+      background:
+        "radial-gradient(ellipse at 50% -100%, #222222 0%, #2c2c2c 99%)",
+      config: config.slow,
+    });
+  }, []);
+
+  const onHoverOutBox = useCallback(() => {
+    bgStyleRef({
+      background:
+        "radial-gradient(ellipse at 50% -100%, #222222 0%, #a4a2a2 99%)",
+      config: config.slow,
+    });
+  }, []);
+
   const handleOnRangeChange = useCallback((e) => {
     const p = e.target.value as number;
     const _y: number = Math.floor((-3800 * (100 - p)) / 100);
@@ -93,8 +120,8 @@ export default function Work() {
                   onHoverOver={onHoverOverBox}
                   onHoverOut={onHoverOutBox}
                 /> */}
-                <div>okokwwww</div>
-                <Box />
+                {/* <div>okokwwww</div> */}
+                {/* <Box /> */}
               </>
             );
           })}
@@ -103,41 +130,69 @@ export default function Work() {
     }
   }, [tick, blocks]);
 
+  function Loader() {
+    const { progress } = useProgress();
+    return <Html center>{progress} % Markets loaded</Html>;
+  }
+
   // market content objects list
   const MarketContents = () => {
+    // if (loading) {
+    //   return <div>Loading...</div>;
+    // }
+
     if (loading) {
-      return <div>Loading...</div>;
+      return <Loader />;
     }
 
-    return (
-      <div className="market">
-        {markets?.markets?.edges.map((item: any, i) => (
-          <>
-            <div
-              className="item_market"
-              onClick={() => {
-                // Construct the URL using item.node.id
-                const marketUrl = `https://explorer.vega.xyz/markets/${item?.node?.id}`;
+    const marketColors = markets?.markets?.edges.map(() => {
+      // Generate a random color for each market
+      const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+      return `#${randomColor}`;
+    });
 
-                // Redirect to the constructed URL
-                window.location.href = marketUrl;
-              }}
-            >
-              {item?.node?.tradableInstrument?.instrument?.code}
-            </div>
-          </>
-        ))}
-      </div>
+    return (
+      <Html fullscreen>
+        <div className="market">
+          {markets?.markets?.edges.map((item: any, i) => (
+            <>
+              <Sphere
+                position={[2, 0, 0]}
+                onHoverOver={() => console.log("hahaah")}
+                onHoverOut={() => console.log("okok")}
+                color={marketColors[i]}
+              />
+
+              {/* <Html fullscreen> */}
+              <div
+                className="item_market"
+                onClick={() => {
+                  // Construct the URL using item.node.id
+                  const marketUrl = `https://explorer.vega.xyz/markets/${item?.node?.id}`;
+
+                  // Redirect to the constructed URL
+                  window.location.href = marketUrl;
+                }}
+              >
+                {item?.node?.tradableInstrument?.instrument?.code}
+              </div>
+
+              {/* </Html> */}
+            </>
+          ))}
+        </div>
+      </Html>
     );
   };
 
   return (
     <>
       <animated.div style={bgStyle}>
-        <Canvas camera={{ position: [0, 0, 5], fov: 60 }}>
+        <Canvas className="canvas" camera={{ position: [0, 0, 5], fov: 60 }}>
           <Effects>
-            {/* <glitchPass enabled={glitchEnabled} attachArray="passes" /> */}
+            <glitchPass enabled={glitchEnabled} attachArray="passes" />
           </Effects>
+
           <CameraPosition />
           <ambientLight />
           <pointLight
@@ -147,7 +202,8 @@ export default function Work() {
             color="#ccc"
           />
           {Contents}
-          <Swarm count={4000} />
+          <Swarm count={3000} />
+          <MarketContents />
         </Canvas>
         <div className="title">
           <span>Vega blockchain visualization</span>
@@ -157,20 +213,16 @@ export default function Work() {
             <br />
           </div>
         </div>
-
-        {navigator.userAgent.match(/(iPhone|iPad|iPod|Android)/i) && (
-          <div className="range">
-            <input
-              type="range"
-              min="0"
-              max="100"
-              step="1"
-              defaultValue="100"
-              onChange={handleOnRangeChange}
-            />
-          </div>
-        )}
-        <MarketContents />
+        <div className="range">
+          <input
+            type="range"
+            min="0"
+            max="100"
+            step="1"
+            defaultValue="100"
+            onChange={handleOnRangeChange}
+          />
+        </div>
       </animated.div>
     </>
   );
