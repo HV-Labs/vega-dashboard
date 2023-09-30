@@ -1,15 +1,12 @@
-import React from "react";
+import "./App.css";
 import MyWebSocketComponent from "./components/MyWebSocketComponent";
 import Work from "./components/Work";
-import Ok from "./components/Ok";
 
 function App() {
   return (
     <div className="App">
-      {/* <h1>WebSocket Messages</h1>
-      <MyWebSocketComponent /> */}
+      <MyWebSocketComponent />
       {/* <Work /> */}
-      <Ok />
     </div>
   );
 }

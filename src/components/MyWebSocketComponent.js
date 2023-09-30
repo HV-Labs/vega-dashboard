@@ -1,31 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import { w3cwebsocket as W3CWebSocket } from 'websocket';
+import React, { useEffect, useState } from "react";
+import { w3cwebsocket as W3CWebSocket } from "websocket";
 
 const MyWebSocketComponent = () => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const client = new W3CWebSocket('wss://vega-mainnet-data.commodum.io/api/v2/stream/event/bus');
+    const client = new W3CWebSocket(
+      "wss://vega-mainnet-data.commodum.io/api/v2/stream/event/bus"
+    );
 
     client.onerror = (error) => {
-      console.error('WebSocket Error:', error);
+      console.error("WebSocket Error:", error);
     };
 
     client.onopen = () => {
-      console.log('WebSocket Client Connected');
+      console.log("WebSocket Client Connected");
       const msg = {};
       client.send(JSON.stringify(msg));
     };
 
     client.onclose = () => {
-      console.log('WebSocket Client Closed');
+      console.log("WebSocket Client Closed");
     };
 
     client.onmessage = (e) => {
-      console.log('Received message:', e.data);
+      console.log("Received message:", e.data);
       setMessages((prevMessages) => [...prevMessages, e.data]);
-      
+
       setLoading(false);
     };
 
