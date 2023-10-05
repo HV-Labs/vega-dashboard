@@ -118,8 +118,8 @@ input[type="range"]::-webkit-slider-thumb {
   font-family: "Staatliches";
   position: absolute;
   /* display: flex; */
-  bottom: 0;
-  left: 0;
+  bottom: 12px;
+  left: 12px;
   font-size: 12px;
   padding: 7px;
   color: #fff;
@@ -135,4 +135,11 @@ input[type="range"]::-webkit-slider-thumb {
   /* top: 200px; */
   /* height: 100vh; */
   z-index: 1;
+}
+
+.color {
+}
+
+.inner_market {
+  display: flex;
 }

@@ -12,7 +12,7 @@ const useListMarket = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          "https://vega-mainnet-data.commodum.io/api/v2/markets"
+          "https://vega-mainnet-data.commodum.io/api/v2/markets?includeSettled=false"
         );
         setMarkets(response.data);
         setLoading(false);
