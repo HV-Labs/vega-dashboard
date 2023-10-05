@@ -389,7 +389,6 @@ export default function App() {
         <div className="desc">
           You are viewing the latest {BLOCK_NUM} blocks.
           <br />
-          Each transaction is stored in a block.
         </div>
         <MarketContents />
       </div>
