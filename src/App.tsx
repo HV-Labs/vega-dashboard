@@ -232,8 +232,7 @@ export default function App() {
   const [bgStyle, bgStyleRef] = useSpring(() => ({
     width: "100vw",
     height: "100vh",
-    background:
-      "radial-gradient(ellipse at 50% -100%, #222222 0%, #a4a2a2 99%)",
+    background: "radial-gradient( at 50% -100%, #CDBBBB 0%, #000000 99%)",
   }));
 
   function CameraPosition() {
@@ -258,8 +257,8 @@ export default function App() {
 
   const onHoverOutBox = useCallback(() => {
     bgStyleRef({
-      background:
-        "radial-gradient(ellipse at 50% -100%, #222222 0%, #a4a2a2 99%)",
+      background: "radial-gradient(at 50% -100%, #CDBBBB 0%, #000000 99%)",
+      // "radial-gradient(ellipse at 50% -100%, #222222 0%, #a4a2a2 99%)",
       config: config.slow,
     });
   }, []);
