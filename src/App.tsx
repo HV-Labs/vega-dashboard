@@ -14,32 +14,22 @@ import {
 import { Effects } from "@react-three/drei";
 import useInterval from "use-interval";
 import Web3 from "web3";
-import { BlockTransactionObject } from "web3-eth";
 import { GlitchPass } from "three/examples/jsm/postprocessing/GlitchPass";
 import Box from "./components/Box";
 import Swarm from "./components/Swarm";
 import useYScroll from "./hooks/useYScroll";
-import WssWorker from "./wss.worker";
 import "./App.css";
 import useListMarket from "./hooks/useListMarket";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 import _ from "lodash";
 
-const BLOCK_NUM = 32;
+const BLOCK_NUM = 2;
 
 extend({ GlitchPass });
-
-const web3 = new Web3();
-const httpProvider = process.env.REACT_APP_HTTP_PROVIDER;
-web3.setProvider(new Web3.providers.HttpProvider(httpProvider));
-
-const worker = new WssWorker();
 
 const MESSAGE_PROCESS_INTERVAL = 1000;
 
 export default function App() {
-  const [blocks, setBlocks] = useState<BlockTransactionObject[]>([]);
-
   // glitch
   const [glitchEnabled, setGlitchEnabled] = useState(false);
 
@@ -76,10 +66,6 @@ export default function App() {
 
     // Handle received messages
     client.onmessage = (e) => {
-      const newMessage = e.data as string;
-
-      // setMessages((prevMessages) => [...prevMessages, newMessage]);
-
       const newDataObj = JSON.parse(e.data as string);
 
       const events = newDataObj?.result?.events;
@@ -97,33 +83,7 @@ export default function App() {
 
         messageQueue = messageQueue.concat(consolidatedData);
 
-        // Limit the number of block numbers stored
-        // if (messageQueue.length > MAX_BLOCK_NUMBERS) {
-        //   messageQueue.splice(0, messageQueue.length - MAX_BLOCK_NUMBERS);
-        // }
-
         setwsLoading(false);
-
-        // consolidatedData.forEach((event) => {
-        //   const [blockNumber] = event.id.split("-");
-
-        //   setProcessedData((prevData) => {
-        //     const newData = { ...prevData };
-        //     if (!newData[blockNumber]) {
-        //       newData[blockNumber] = [];
-        //     }
-        //     newData[blockNumber].push(event);
-        //     // setGlitchEnabled(true);
-
-        //     const blockNumbers = Object.keys(newData);
-        //     if (blockNumbers.length > BLOCK_NUM) {
-        //       const oldestBlockNumber = blockNumbers[blockNumbers.length];
-        //       delete newData[oldestBlockNumber];
-        //     }
-
-        //     return newData;
-        //   });
-        // });
       }
     };
 
@@ -165,9 +125,6 @@ export default function App() {
       MESSAGE_PROCESS_INTERVAL
     );
 
-    // // Clear the interval on unmount
-    // return () => clearInterval(intervalId);
-
     // Clean up WebSocket connection on unmount
     return () => {
       if (client.readyState === client.OPEN) {
@@ -175,41 +132,6 @@ export default function App() {
       }
     };
   }, []);
-
-  // useEffect(() => {
-  //   const func = async () => {
-  //     worker.addEventListener("message", async (message) => {
-  //       const obj = JSON.parse(message.data);
-  //       if (obj.params) {
-  //         const newBlockNumber = parseInt(obj.params.result.number, 16);
-  //         const block = await web3.eth.getBlock(newBlockNumber, true);
-  //         if (!block) return;
-
-  //         setBlocks((arr) => {
-  //           // check latest block number
-  //           setGlitchEnabled(true);
-  //           //console.log(arr)
-  //           if (arr.length > 0 && arr[0].number !== newBlockNumber) {
-  //             return [block, ...arr];
-  //           }
-  //           return [...arr];
-  //         });
-  //       }
-  //     });
-  //     const latestBlockNumber = await (
-  //       await web3.eth.getBlock("latest")
-  //     ).number;
-  //     setBlocks(
-  //       await Promise.all(
-  //         [...Array(BLOCK_NUM)].map((_, i) =>
-  //           web3.eth.getBlock(latestBlockNumber - i, true)
-  //         )
-  //       )
-  //     );
-  //   };
-
-  //   func();
-  // }, []);
 
   // disable glitch effect component
   setTimeout(() => {
@@ -258,7 +180,6 @@ export default function App() {
   const onHoverOutBox = useCallback(() => {
     bgStyleRef({
       background: "radial-gradient(at 50% -100%, #CDBBBB 0%, #000000 99%)",
-      // "radial-gradient(ellipse at 50% -100%, #222222 0%, #a4a2a2 99%)",
       config: config.slow,
     });
   }, []);
@@ -342,7 +263,6 @@ export default function App() {
               }}
             ></div>
 
-            {/* <Html fullscreen> */}
             <div
               className="item_market"
               onClick={() => {
@@ -353,8 +273,6 @@ export default function App() {
             >
               {item?.node?.tradableInstrument?.instrument?.code}
             </div>
-
-            {/* </Html> */}
           </div>
         ))}
       </div>

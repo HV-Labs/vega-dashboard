@@ -9,12 +9,10 @@ import React, {
 } from "react";
 import { ReactThreeFiber, useThree, useFrame } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
-import { BlockTransactionObject } from "web3-eth";
 import * as THREE from "three";
 import { Group, Mesh, Vector3, BufferGeometry } from "three";
 import { a, useSpring } from "@react-spring/three";
 import { config } from "@react-spring/core";
-import { hash2Colors } from "../utils/hash2Colors";
 
 type BoxProps = ReactThreeFiber.Object3DNode<Mesh, typeof Mesh> & {
   block: any;
@@ -143,8 +141,6 @@ export default function Box(props: BoxProps) {
     const y = Math.random() - 0.5;
     const z = Math.random() - 0.5;
 
-    // console.log("okok", props.marketColors[props.hash]);
-    // console.log("mark", props.marketNames[props.hash]);
     const m = new THREE.MeshLambertMaterial({
       color: props.marketColors[props.hash] || 0xffffff,
     });
@@ -177,16 +173,7 @@ export default function Box(props: BoxProps) {
 
     return (
       <group ref={refTxPoints} position={props.position} visible={hoverd}>
-        {/* {console.log("hehehehe", props.processedData[props.block])} */}
         {hoverd &&
-          // props.processedData[props.block].map((tx, i) => {
-
-          //   return (
-          //     <Tx key={i} hash={tx.id} />
-          //     // <Html>ok</Html>
-          //   );
-          // })
-
           uniqueIds.map((marketItem, i) => {
             return (
               <Tx
