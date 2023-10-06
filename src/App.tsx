@@ -13,7 +13,6 @@ import {
 } from "react-spring";
 import { Effects } from "@react-three/drei";
 import useInterval from "use-interval";
-import Web3 from "web3";
 import { GlitchPass } from "three/examples/jsm/postprocessing/GlitchPass";
 import Box from "./components/Box";
 import Swarm from "./components/Swarm";
@@ -23,7 +22,7 @@ import useListMarket from "./hooks/useListMarket";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 import _ from "lodash";
 
-const BLOCK_NUM = 2;
+const BLOCK_NUM = 32;
 
 extend({ GlitchPass });
 
