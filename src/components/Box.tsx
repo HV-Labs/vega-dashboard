@@ -13,6 +13,7 @@ import * as THREE from "three";
 import { Group, Mesh, Vector3, BufferGeometry } from "three";
 import { a, useSpring } from "@react-spring/three";
 import { config } from "@react-spring/core";
+import "../styles/box.css";
 
 type BoxProps = ReactThreeFiber.Object3DNode<Mesh, typeof Mesh> & {
   block: any;
