@@ -39,6 +39,59 @@ export default function App() {
   const [processedData, setProcessedData] = useState([]);
   const [wsLoading, setwsLoading] = useState<boolean>(true);
 
+  // Generate dummy processedData
+  const generateDummyProcessedData = () => {
+    const dummyData = {};
+    const totalBlocks = BLOCK_NUM;
+    const markets = [
+      "9f6160f248afc373b9458ad03b0e6faf5e5b4cde8e4b7e093b571bb4a2d5b08b2",
+      "f3f6c9c98e7f4e1a4d4b7c3e8b9f6a5c4e3d2b1a7e9f8c6d5a4e3b2f1a9e8d7c",
+      "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a7b8c9d",
+      "z9y8x7w6v5u4t3s2r1q0p9o8n7m6l5k4j3i2h1g0f9e8d7c6b5a4z3y2x1w0v",
+      "1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t1u2v3w4x5y6z7a8b9c0d"
+    ];
+
+    for (let i = 0; i < totalBlocks; i++) {
+      const blockNumber = (999968 + i).toString();
+      dummyData[blockNumber] = [];
+
+      const numEvents = Math.floor(Math.random() * 5) + 1; // 1 to 5 events per block
+
+      for (let j = 0; j < numEvents; j++) {
+        const eventId = `${blockNumber}-${j}`;
+        const marketId = markets[Math.floor(Math.random() * markets.length)];
+        const type = Math.random() > 0.5 ? "PositionStateEvent" : "MarginLevels";
+
+        const event = {
+          id: eventId,
+          type: type,
+          obj: {
+            [type.toLowerCase()]: { marketId: marketId }
+          },
+          blockId: `hash-block-${blockNumber}`,
+          market: marketId
+        };
+
+        dummyData[blockNumber].push(event);
+      }
+    }
+
+    return dummyData;
+  };
+
+  // Use dummy data if WebSocket doesn't provide data within timeout
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (wsLoading && Object.keys(processedData).length === 0) {
+        const dummyData = generateDummyProcessedData();
+        setProcessedData(dummyData);
+        setwsLoading(false);
+      }
+    }, 3000); // 3 seconds timeout
+
+    return () => clearTimeout(timeoutId);
+  }, [wsLoading, processedData]);
+
   useEffect(() => {
     const client = new W3CWebSocket(
       "wss://vega-mainnet-data.commodum.io/api/v2/stream/event/bus"
